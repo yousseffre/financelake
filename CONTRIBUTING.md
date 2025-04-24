@@ -81,6 +81,8 @@ If you want to work on a new feature, follow these steps.
 5. Commit
 6. Push your branch to your fork
 7. Go into github UI and create a PR from your fork & branch, and merge it into upstream MAIN
+8. link an issue to pull request
+9. Complete check list 
 
 ## Pulling in changes from upstream
 
