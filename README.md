@@ -160,3 +160,23 @@ cp .env.example .env
 -RAW_DATA_PATH:		Path for storing raw data
 -DASHBOARD_USER:	Dashboard login user
 -LOG_LEVEL:		Logging level (e.g., INFO, DEBUG)
+
+
+# Steps to execute Kafka & HDFS:
+
+1. Start Kafka & Zookeeper
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+
+2. Start HDFS 
+
+Make sure HDFS is running on localhost:9000.
+
+3. Start the Kafka producer
+
+python producer.py
+
+4. Deploy the HDFS connector
+
+curl -X POST -H "Content-Type: application/json" --data @hdfs-sink.json http://localhost:8083/connectors
