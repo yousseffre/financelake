@@ -39,7 +39,7 @@ Ensure you have Python 3 installed, then install the required packages:
 pip install kafka-python requests
 
 Copy the Producer Script 
-Copy the content of the file kafka_producer_financeLake  py to your directory  
+Copy the content of the file kafka_producer_financeLake.py to your directory  
 
 🔴⚠️  Create folder in Hdfs : hdfs dfs -mkdir -p /user/root/financeLake/logs/kafka/  
 
