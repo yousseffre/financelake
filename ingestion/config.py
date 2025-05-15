@@ -11,4 +11,4 @@ SYMBOL = os.getenv("SYMBOL")
 TOPIC_NAME = os.getenv("TOPIC_NAME")
 
 KAFKA_BOOTSTRAP_SERVERS = 'localhost:9092'
-HDFS_URL= 'http://localhost:9870'
+HDFS_URL= 'hdfs://localhost:9000'
