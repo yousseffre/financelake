@@ -36,7 +36,7 @@ We use a Python script to fetch data from Alpha Vantage and send it to a Kafka t
 
 Ensure you have Python 3 installed, then install the required packages:
 
-pip install kafka-python requests
+pip install dotenv kafka-python requests docopt hdfs
 
 Copy the Producer Script 
 Copy the content of the file kafka_producer_financeLake  py to your directory  

@@ -9,3 +9,6 @@ LOCAL_LOG_DIR = os.getenv("LOCAL_LOG_DIR")
 API_KEY = os.getenv("API_KEY")
 SYMBOL = os.getenv("SYMBOL")
 TOPIC_NAME = os.getenv("TOPIC_NAME")
+
+KAFKA_BOOTSTRAP_SERVERS = 'localhost:9092'
+HDFS_URL= 'http://localhost:9870'

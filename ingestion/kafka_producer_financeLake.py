@@ -5,12 +5,16 @@ import traceback
 import os
 from kafka import KafkaProducer
 from datetime import datetime
-from config import TOPIC, HDFS_BASE_DIR, LOCAL_LOG_DIR, API_KEY, SYMBOL, TOPIC_NAME
+from hdfs import InsecureClient
+from config import TOPIC, HDFS_BASE_DIR, LOCAL_LOG_DIR, API_KEY, SYMBOL, TOPIC_NAME, KAFKA_BOOTSTRAP_SERVERS, HDFS_URL
 
 producer = KafkaProducer(
-    bootstrap_servers='localhost:9092',
+    bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
     value_serializer=lambda m: json.dumps(m).encode('utf-8')
 )
+
+# Initialize HDFS client
+hdfs_client = InsecureClient(HDFS_URL , user='hadoop')
 
 os.makedirs(LOCAL_LOG_DIR, exist_ok=True)
 
@@ -23,7 +27,6 @@ def get_hdfs_path():
     return f"{HDFS_BASE_DIR}{date_str}/{hour_str}/{second_str}/events-{ts}.log"
 
 def clean_alpha_vantage_data(raw_data):
-    # Rename top-level keys
     clean_data = {}
     if 'Meta Data' in raw_data:
         meta = raw_data['Meta Data']
@@ -47,7 +50,7 @@ def clean_alpha_vantage_data(raw_data):
 
 while True:
     try:
-        # Fetch data
+        # Fetch data from Alpha Vantage API
         url = f'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={SYMBOL}&interval=1min&apikey={API_KEY}'
         response = requests.get(url)
         data = response.json()
@@ -70,8 +73,13 @@ while True:
         with open(local_log_file, 'w') as f:
             f.write(error_msg)
 
-        os.system(f"hdfs dfs -mkdir -p {os.path.dirname(hdfs_path)}")
-        os.system(f"hdfs dfs -put -f {local_log_file} {hdfs_path}")
+        try:
+            hdfs_client.makedirs(os.path.dirname(hdfs_path), create_parents=True)
+            with open(local_log_file, 'rb') as log_file:
+                hdfs_client.write(hdfs_path, log_file, overwrite=True)
+            print(f"Error log written to HDFS path: {hdfs_path}")
+        except Exception as hdfs_error:
+            print(f"Failed to write to HDFS: {str(hdfs_error)}")
 
     # Wait for 60 seconds before the next request
     time.sleep(60)
