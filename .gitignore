@@ -17,3 +17,6 @@ __pycache__/
 
 # Dataset
 data-ingestion-kafka/data/creditcard.csv
+
+package-lock.json
+
