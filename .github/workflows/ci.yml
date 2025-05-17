@@ -46,7 +46,7 @@ jobs:
           path: coverage.xml
 
       - name: Type‑checking (mypy)
-        run: mypy src/
+        run: mypy .
 
       - name: Check code format (black)
         run: black --check .
